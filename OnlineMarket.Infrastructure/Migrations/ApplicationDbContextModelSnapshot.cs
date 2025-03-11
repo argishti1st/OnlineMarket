@@ -169,7 +169,7 @@ namespace OnlineMarket.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineMarket.Domain.Entities.Order", b =>
+            modelBuilder.Entity("OnlineMarket.Domain.Entities.OrderDb", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -199,7 +199,7 @@ namespace OnlineMarket.Infrastructure.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("OnlineMarket.Domain.Entities.Product", b =>
+            modelBuilder.Entity("OnlineMarket.Domain.Entities.ProductDb", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -219,8 +219,8 @@ namespace OnlineMarket.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -295,7 +295,7 @@ namespace OnlineMarket.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
+            modelBuilder.Entity("OrderDbProductDb", b =>
                 {
                     b.Property<int>("OrdersId")
                         .HasColumnType("int");
@@ -361,15 +361,15 @@ namespace OnlineMarket.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
+            modelBuilder.Entity("OrderDbProductDb", b =>
                 {
-                    b.HasOne("OnlineMarket.Domain.Entities.Order", null)
+                    b.HasOne("OnlineMarket.Domain.Entities.OrderDb", null)
                         .WithMany()
                         .HasForeignKey("OrdersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineMarket.Domain.Entities.Product", null)
+                    b.HasOne("OnlineMarket.Domain.Entities.ProductDb", null)
                         .WithMany()
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
