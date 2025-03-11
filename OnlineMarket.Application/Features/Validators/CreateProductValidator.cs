@@ -14,11 +14,13 @@ namespace OnlineMarket.Application.Features.Validators
             RuleFor(p => p.Description)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull()
-                .MaximumLength(200).WithMessage("{PropertyName} must not exceed 200 characters.");
+                .MaximumLength(500).WithMessage("{PropertyName} must not exceed 200 characters.");
             RuleFor(p => p.Price)
-                .NotEmpty().WithMessage("{PropertyName} is required.");
+                .NotEmpty()
+                .GreaterThan(0).WithMessage("{PropertyName} is required and must be greater than 0.");
             RuleFor(p => p.Quantity)
-                .NotEmpty().WithMessage("{PropertyName} is required.");
+                .NotEmpty()
+                .GreaterThan(0).WithMessage("{PropertyName} is required and must be greater than 0.");
             RuleFor(p => p.Category)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull()

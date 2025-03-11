@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OnlineMarket.Application.Features.Interfaces;
+using OnlineMarket.Application.Interfaces;
 using OnlineMarket.Domain.Entities;
 using OnlineMarket.Infrastructure.Data;
 
@@ -46,6 +46,13 @@ namespace OnlineMarket.Infrastructure.Repositiories
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<ProductDb?> GetBySpecificationAsync(ISpecification<ProductDb> specification)
+        {
+            return await _context.Products
+                .Where(specification.Criteria)
+                .FirstOrDefaultAsync();
         }
     }
 }

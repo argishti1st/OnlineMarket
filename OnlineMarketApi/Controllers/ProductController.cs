@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineMarket.Api.Helpers;
 using OnlineMarket.Application.Features.Products.Commands;
 using OnlineMarket.Application.Features.Products.Queries;
-using Serilog;
-using System.Security.Claims;
 
 namespace OnlineMarket.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
@@ -39,6 +38,7 @@ namespace OnlineMarket.Api.Controllers
         }
 
         [HttpPut("Update")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProduct(UpdateProductCommand command)
         {
             _logger.LogInformation($"UpdateProduct called for ID: {command.ProductId}");
@@ -47,6 +47,7 @@ namespace OnlineMarket.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddProduct(CreateProductCommand command)
         {
             _logger.LogInformation("AddProduct called");
@@ -62,19 +63,5 @@ namespace OnlineMarket.Api.Controllers
             var result = await _mediator.Send(new DeleteProductCommand(id));
             return this.FromResultCode(result);
         }
-
-        [HttpGet("debug-token")]
-        public IActionResult DebugToken()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity == null || !identity.IsAuthenticated)
-                return Unauthorized("❌ Token is invalid.");
-
-            var claims = identity.Claims.Select(c => new { c.Type, c.Value }).ToList();
-
-            return Ok(new { Message = "✅ Token is valid", Claims = claims });
-        }
-
     }
 }

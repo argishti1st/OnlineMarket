@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using FluentValidation;
+using System.Net;
 using System.Text.Json;
 
 namespace OnlineMarket.Api.Middlewares
@@ -19,6 +20,14 @@ namespace OnlineMarket.Api.Middlewares
             try
             {
                 await _next(context);
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, "Validation Exception");
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var response = new { message = ex.Message, errors = ex.Errors.Select(x => x.ErrorMessage) };
+                await context.Response.WriteAsync(JsonSerializer.Serialize(response));
             }
             catch (Exception ex)
             {

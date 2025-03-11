@@ -12,19 +12,16 @@ namespace OnlineMarket.Aapi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly JWTSettings _jwtSettings;
         private readonly RoleManager<IdentityRole> _roleManager;
 
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
             JWTSettings jwtSettings,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _jwtSettings = jwtSettings;
             _roleManager = roleManager;
         }

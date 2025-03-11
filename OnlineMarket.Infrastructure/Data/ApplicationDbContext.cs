@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Domain.Common;
 using OnlineMarket.Domain.Entities;
 using OnlineMarket.Infrastructure.Data.Identity;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
+using System.Security.Claims;
 
 namespace OnlineMarket.Infrastructure.Data
 {
@@ -21,10 +23,12 @@ namespace OnlineMarket.Infrastructure.Data
 
         public DbSet<ProductDb> Products { get; set; }
         public DbSet<OrderDb> Orders { get; set; }
+        public DbSet<OrderProductDb> OrderProducts { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst("sub")?.Value;
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+             ?? _httpContextAccessor.HttpContext?.User?.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
             var entries = ChangeTracker.Entries<AuditableEntity>();
             foreach (var entry in entries)

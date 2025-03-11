@@ -199,6 +199,24 @@ namespace OnlineMarket.Infrastructure.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("OnlineMarket.Domain.Entities.OrderProductDb", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderProducts");
+                });
+
             modelBuilder.Entity("OnlineMarket.Domain.Entities.ProductDb", b =>
                 {
                     b.Property<int>("Id")
@@ -295,21 +313,6 @@ namespace OnlineMarket.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("OrderDbProductDb", b =>
-                {
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrdersId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("OrderProducts", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -361,19 +364,33 @@ namespace OnlineMarket.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderDbProductDb", b =>
+            modelBuilder.Entity("OnlineMarket.Domain.Entities.OrderProductDb", b =>
                 {
-                    b.HasOne("OnlineMarket.Domain.Entities.OrderDb", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
+                    b.HasOne("OnlineMarket.Domain.Entities.OrderDb", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineMarket.Domain.Entities.ProductDb", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
+                    b.HasOne("OnlineMarket.Domain.Entities.ProductDb", "Product")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("OnlineMarket.Domain.Entities.OrderDb", b =>
+                {
+                    b.Navigation("OrderProducts");
+                });
+
+            modelBuilder.Entity("OnlineMarket.Domain.Entities.ProductDb", b =>
+                {
+                    b.Navigation("OrderProducts");
                 });
 #pragma warning restore 612, 618
         }

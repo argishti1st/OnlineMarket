@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using OnlineMarket.Application.Features.Interfaces;
+using OnlineMarket.Application.Interfaces;
 using OnlineMarket.Domain.Common;
 using OnlineMarket.Domain.Entities;
 
@@ -21,29 +21,24 @@ namespace OnlineMarket.Application.Features.Products.Commands
 
         public async Task<Result<int>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var product = new ProductDb(
-                    request.Name,
-                    request.Description,
-                    request.Price,
-                    request.Quantity,
-                    request.Category
-                );
+            _logger.LogInformation("Checking if product already exists: {Name}, {Price}", request.Name, request.Price);
 
-                var productId = await _productRepository.AddAsync(product);
-                _logger.LogInformation($"Product created successfully: {productId}");
+            var specification = new ProductSpecification(request.Name, request.Price);
+            var existingProduct = await _productRepository.GetBySpecificationAsync(specification);
 
-                return Result<int>.Success(productId);
-            }
-            catch (Exception ex)
+            if (existingProduct != null)
             {
-                _logger.LogError(ex, "Error occurred while creating product");
-                return Result<int>.BadRequest("An error occurred while creating the product.");
+                _logger.LogWarning("Product already exists: {ProductId}", existingProduct.Id);
+                return Result<int>.BadRequest($"Product '{request.Name}' with price {request.Price} already exists.");
             }
+
+            var newProduct = new ProductDb(request.Name, request.Description, request.Price, request.Quantity, request.Category);
+            await _productRepository.AddAsync(newProduct);
+
+            _logger.LogInformation("Product added successfully: {ProductId}", newProduct.Id);
+            return Result<int>.Success(newProduct.Id);
         }
 
-        /// ✅ **Update Product**
         public async Task<Result<int>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             try
@@ -73,7 +68,6 @@ namespace OnlineMarket.Application.Features.Products.Commands
             }
         }
 
-        /// ✅ **Delete Product**
         public async Task<Result<int>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
             try

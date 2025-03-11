@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using System.Text;
 using Serilog;
 
 namespace OnlineMarket.Api.Middlewares

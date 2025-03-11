@@ -27,6 +27,6 @@
 
         public string Category { get; set; }
 
-        public ICollection<OrderDb> Orders { get; set; }
+        public ICollection<OrderProductDb> OrderProducts { get; set; } = new List<OrderProductDb>();
     }
 }

@@ -1,5 +1,4 @@
-﻿using Elastic.CommonSchema;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using OnlineMarket.Api.Configurations;
 using OnlineMarket.Infrastructure.Data.Identity;
 using System.IdentityModel.Tokens.Jwt;

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using OnlineMarket.Application.DtoS;
-using OnlineMarket.Application.Features.Interfaces;
+using OnlineMarket.Application.Interfaces;
 using OnlineMarket.Domain.Common;
 
 namespace OnlineMarket.Application.Features.Products.Queries
@@ -34,7 +34,8 @@ namespace OnlineMarket.Application.Features.Products.Queries
                     product.Name,
                     product.Description,
                     product.Price,
-                    product.Quantity);
+                    product.Quantity,
+                    product.Category);
 
                 _logger.LogInformation($"Retrieved product with ID {request.ProductId}.");
                 return Result<ProductDto>.Success(productDto);
@@ -62,7 +63,8 @@ namespace OnlineMarket.Application.Features.Products.Queries
                     product.Name,
                     product.Description,
                     product.Price,
-                    product.Quantity));
+                    product.Quantity,
+                    product.Category));
 
                 _logger.LogInformation($"Retrieved {productDtos.Count()} products.");
                 return Result<IEnumerable<ProductDto>>.Success(productDtos);

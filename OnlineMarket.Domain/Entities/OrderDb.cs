@@ -5,6 +5,6 @@ namespace OnlineMarket.Domain.Entities
     public class OrderDb : AuditableEntity
     {
         public int Id { get; set; }
-        public ICollection<ProductDb> Products { get; set; } = new List<ProductDb>();
+        public ICollection<OrderProductDb> OrderProducts { get; set; } = new List<OrderProductDb>();
     }
 }

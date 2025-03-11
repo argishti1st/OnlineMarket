@@ -18,10 +18,6 @@ namespace OnlineMarket.Infrastructure.Configurations
                 .IsRequired();
 
             builder.HasQueryFilter(o => !o.IsDeleted);
-
-            builder.HasMany(o => o.Products)
-                .WithMany(p => p.Orders)
-                .UsingEntity(j => j.ToTable("OrderProducts"));
         }
     }
 }

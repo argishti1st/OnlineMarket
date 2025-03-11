@@ -1,6 +1,4 @@
 ﻿using Serilog;
-using Elastic.Serilog.Sinks;
-using Serilog.Extensions.Hosting;
 
 namespace OnlineMarket.Api.Configurations
 {
